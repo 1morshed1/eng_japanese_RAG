@@ -1,0 +1,43 @@
+jap_llm/
+├── app/                          # Main application directory
+│   ├── __init__.py               # Application initialization
+│   ├── main.py                   # Main application entry point
+│   ├── config.py                 # Configuration settings
+│   │
+│   ├── middleware/               # Middleware components
+│   │   ├── __init__.py
+│   │   └── auth.py               # Authentication middleware
+│   │
+│   ├── models/                   # Data models and schemas
+│   │   ├── __init__.py
+│   │   └── schemas.py            # Pydantic schemas for API
+│   │
+│   ├── routes/                   # API route handlers
+│   │   ├── __init__.py
+│   │   ├── ingest.py             # Data ingestion endpoints
+│   │   ├── retrieve.py           # Data retrieval endpoints
+│   │   └── generate.py           # Text generation endpoints
+│   │
+│   ├── services/                 # Business logic services
+│   │   ├── __init__.py
+│   │   ├── embedding_service.py  # Text embedding functionality
+│   │   ├── faiss_service.py      # Vector search with FAISS
+│   │   ├── llm_service.py        # Language model interactions
+│   │   └── translation_service.py # Translation services
+│   │
+│   └── utils/                    # Utility functions
+│       ├── __init__.py
+│       ├── language_detector.py  # Language detection utilities
+│       └── logger.py             # Logging configuration
+│
+├── docs/                         # Documentation and data files
+│   ├── diabetes_eng.txt          # English diabetes-related data
+│   └── diabetes_jap.txt          # Japanese diabetes-related data
+│
+├── .dockerignore                 # Docker ignore file
+├── .env                          # Environment variables (private)
+├── .env.example                  # Environment variables template
+├── .gitignore                    # Git ignore file
+├── Dockerfile                    # Docker container configuration
+├── docker-compose.yml            # Docker Compose orchestration
+└── requirements.txt              # Python dependencies

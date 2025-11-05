@@ -1,0 +1,751 @@
+{
+	"info": {
+		"_postman_id": "healthcare-rag-assistant-2025",
+		"name": "Healthcare RAG Assistant API",
+		"description": "Complete API collection for testing the Healthcare RAG Assistant - a bilingual (EN/JA) medical knowledge system using RAG.\n\n**Setup Instructions**:\n1. Import this collection into Postman\n2. Set the `api_key` variable in Collection Variables\n3. Start your server: `uvicorn app.main:app --reload`\n4. Run requests in order (Public → Ingest → Retrieve → Generate)\n\n**Features Tested**:\n- Document ingestion (EN/JA)\n- Semantic search\n- Response generation\n- Bilingual support\n- Authentication\n- Health checks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Public Endpoints",
+			"item": [
+				{
+					"name": "Root - Get API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "Get basic API information. No authentication required."
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Check API health status. Returns FAISS index size, document count, and uptime. No authentication required."
+					},
+					"response": []
+				},
+				{
+					"name": "API Documentation (Swagger)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/docs",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"docs"
+							]
+						},
+						"description": "Access interactive API documentation (Swagger UI). No authentication required."
+					},
+					"response": []
+				}
+			],
+			"description": "Public endpoints that don't require authentication"
+		},
+		{
+			"name": "Ingest - Document Upload",
+			"item": [
+				{
+					"name": "Ingest English Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "docs/diabetes_eng.txt",
+									"description": "Select the diabetes_eng.txt file from docs/ folder"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/ingest",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"ingest"
+							]
+						},
+						"description": "Upload an English medical document. The system will:\n1. Detect language (English)\n2. Chunk the text\n3. Generate embeddings\n4. Store in FAISS\n\n**Expected Response**: Document ID, language, chunks created, processing time"
+					},
+					"response": []
+				},
+				{
+					"name": "Ingest Japanese Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "docs/diabetes_jap.txt",
+									"description": "Select the diabetes_jap.txt file from docs/ folder"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/ingest",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"ingest"
+							]
+						},
+						"description": "Upload a Japanese medical document. Tests bilingual support."
+					},
+					"response": []
+				},
+				{
+					"name": "Ingest Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/ingest/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"ingest",
+								"health"
+							]
+						},
+						"description": "Check health of ingestion endpoint and its dependencies (embedding service, FAISS service)."
+					},
+					"response": []
+				},
+				{
+					"name": "Ingest Statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/ingest/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"ingest",
+								"stats"
+							]
+						},
+						"description": "Get statistics about ingested documents. Requires authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "Document ingestion endpoints for uploading medical documents"
+		},
+		{
+			"name": "Retrieve - Semantic Search",
+			"item": [
+				{
+					"name": "Retrieve - English Query",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"What are the recommendations for Type 2 diabetes management?\",\n    \"top_k\": 3,\n    \"min_score\": 0.5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Search for relevant documents using semantic similarity.\n\n**Parameters**:\n- `query`: Your search query\n- `top_k`: Number of results to return (1-10)\n- `min_score`: Minimum similarity threshold (0.0-1.0)\n\n**Expected**: Top 3 most relevant document chunks with similarity scores"
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve - Japanese Query",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"糖尿病の管理に関する推奨事項は何ですか？\",\n    \"top_k\": 3,\n    \"min_score\": 0.5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Search using Japanese query. Tests multilingual embedding support."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve - Low Threshold",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"diabetes treatment\",\n    \"top_k\": 5,\n    \"min_score\": 0.3\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Retrieve with lower threshold to get more results."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve - High Threshold",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"What is the first-line medication for diabetes?\",\n    \"top_k\": 3,\n    \"min_score\": 0.7\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Retrieve only highly relevant results (score > 0.7)"
+					},
+					"response": []
+				}
+			],
+			"description": "Document retrieval endpoints for semantic search"
+		},
+		{
+			"name": "Generate - AI Responses",
+			"item": [
+				{
+					"name": "Generate - English Query → English Response",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"What are the dietary recommendations for managing Type 2 diabetes?\",\n    \"output_language\": \"en\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/generate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"generate"
+							]
+						},
+						"description": "Generate a contextual response based on retrieved documents.\n\n**Process**:\n1. Detects query language\n2. Retrieves relevant documents\n3. Generates structured response\n4. Returns answer with source citations\n\n**Expected**: Detailed response with medical disclaimer and sources"
+					},
+					"response": []
+				},
+				{
+					"name": "Generate - English Query → Japanese Response",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"What medications are recommended for diabetes?\",\n    \"output_language\": \"ja\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/generate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"generate"
+							]
+						},
+						"description": "Query in English, get response in Japanese. Tests translation capability."
+					},
+					"response": []
+				},
+				{
+					"name": "Generate - Japanese Query → Japanese Response",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"2型糖尿病の治療法は何ですか？\",\n    \"output_language\": \"ja\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/generate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"generate"
+							]
+						},
+						"description": "Full Japanese workflow - query and response both in Japanese."
+					},
+					"response": []
+				},
+				{
+					"name": "Generate - Auto Language Detection",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"What is insulin?\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/generate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"generate"
+							]
+						},
+						"description": "No output_language specified - system auto-detects query language and responds in same language."
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/generate/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"generate",
+								"health"
+							]
+						},
+						"description": "Check health of generation endpoint and all its dependencies (embedding, FAISS, LLM, translation services)."
+					},
+					"response": []
+				}
+			],
+			"description": "Response generation endpoints using RAG"
+		},
+		{
+			"name": "Admin & Stats",
+			"item": [
+				{
+					"name": "Admin Statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"stats"
+							]
+						},
+						"description": "Get detailed system statistics including FAISS index size, vector count, and uptime. Requires authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "Administrative endpoints"
+		},
+		{
+			"name": "Error Cases - Testing",
+			"item": [
+				{
+					"name": "Test - Missing API Key",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"test\",\n    \"top_k\": 3\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Test authentication - should return 401 Unauthorized"
+					},
+					"response": []
+				},
+				{
+					"name": "Test - Invalid API Key",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "wrong-key-12345",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"test\",\n    \"top_k\": 3\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Test with wrong API key - should return 401 Unauthorized"
+					},
+					"response": []
+				},
+				{
+					"name": "Test - Invalid Request (Empty Query)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"\",\n    \"top_k\": 3\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Test with empty query - should return 422 Validation Error"
+					},
+					"response": []
+				},
+				{
+					"name": "Test - Invalid Request (Negative top_k)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"test query\",\n    \"top_k\": -1,\n    \"min_score\": 0.5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Test with invalid top_k value - should return 422 Validation Error"
+					},
+					"response": []
+				},
+				{
+					"name": "Test - Query on Empty Index",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": \"This query will find nothing\",\n    \"top_k\": 3,\n    \"min_score\": 0.9\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/retrieve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"retrieve"
+							]
+						},
+						"description": "Query with very high threshold when index might be empty. Should return empty results gracefully."
+					},
+					"response": []
+				}
+			],
+			"description": "Test error handling and edge cases"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "api_key",
+			"value": "dev-key-12345",
+			"type": "string"
+		}
+	]
+}
+

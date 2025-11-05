@@ -1,0 +1,55 @@
+# Healthcare RAG Assistant - Production Requirements
+# Python 3.10+
+
+# === Core Web Framework ===
+fastapi
+uvicorn[standard]  # ASGI server with websockets
+python-multipart    # File upload support
+pydantic            # Data validation
+pydantic-settings   # Settings management with .env support
+
+# === Vector Search & ML ===
+faiss-cpu           # CPU version (use faiss-gpu for GPU)
+sentence-transformers
+numpy
+transformers
+torch               # PyTorch for transformers
+
+# === Translation Dependencies (MarianMT) ===
+sentencepiece      # Required by MarianMT tokenizer
+sacremoses          # Required for tokenization
+protobuf           # Required by transformers
+
+# === NLP & Language Processing ===
+nltk               # Sentence tokenization
+langdetect          # Language detection
+
+# === Security & API Protection ===
+slowapi            # Rate limiting
+python-jose[cryptography]  # JWT tokens
+python-dotenv      # .env file handling
+
+# === File Handling & Utilities ===
+aiofiles          # Async file operations
+werkzeug           # secure_filename utility
+
+# === HTTP Client ===
+httpx            # Async HTTP client (for testing)
+
+# === Testing Framework ===
+pytest
+pytest-asyncio
+pytest-cov
+
+# === Code Quality ===
+black
+flake8
+isort
+
+# === Logging ===
+python-json-logger  # Structured JSON logging
+colorlog          # Colored console logs (dev)
+
+# === Utilities ===
+python-dateutil
+pytz
