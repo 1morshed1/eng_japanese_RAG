@@ -1,55 +1,115 @@
 # Healthcare RAG Assistant - Production Requirements
 # Python 3.10+
+# Combined from req.txt (pinned versions) and requirements.txt (dependencies)
 
 # === Core Web Framework ===
-fastapi
-uvicorn[standard]  # ASGI server with websockets
-python-multipart    # File upload support
-pydantic            # Data validation
-pydantic-settings   # Settings management with .env support
+fastapi==0.121.0
+uvicorn[standard]==0.38.0  # ASGI server with websockets
+starlette==0.49.3
+python-multipart==0.0.20   # File upload support
+h11==0.16.0
+httptools==0.7.1
+uvloop==0.22.1
+watchfiles==1.1.1
+websockets==15.0.1
 
-# === Vector Search & ML ===
-faiss-cpu           # CPU version (use faiss-gpu for GPU)
-sentence-transformers
-numpy
-transformers
-torch               # PyTorch for transformers
+# === Data Validation & Settings ===
+pydantic==2.12.3
+pydantic-settings==2.11.0
+pydantic_core==2.41.4
+annotated-types==0.7.0
+typing_extensions==4.15.0
+
+# === Vector Search & ML Core ===
+faiss-cpu==1.12.0          # CPU version (use faiss-gpu for GPU)
+sentence-transformers==5.1.2
+numpy==2.3.4
+transformers==4.57.1
+torch==2.9.0               # PyTorch for transformers
+tokenizers==0.22.1
+safetensors==0.6.2
+
+# === HuggingFace Ecosystem ===
+huggingface-hub==0.36.0
 
 # === Translation Dependencies (MarianMT) ===
-sentencepiece      # Required by MarianMT tokenizer
-sacremoses          # Required for tokenization
-protobuf           # Required by transformers
+sentencepiece==0.2.1      # Required by MarianMT tokenizer
+sacremoses==0.1.1         # Required for tokenization
+protobuf==6.33.0          # Required by transformers
 
 # === NLP & Language Processing ===
-nltk               # Sentence tokenization
-langdetect          # Language detection
+nltk==3.9.2               # Sentence tokenization
+langdetect==1.0.9         # Language detection
+regex==2025.11.3
 
 # === Security & API Protection ===
-slowapi            # Rate limiting
-python-jose[cryptography]  # JWT tokens
-python-dotenv      # .env file handling
+slowapi==0.1.9            # Rate limiting
+limits==5.6.0
+python-jose==3.5.0        # JWT tokens
+cryptography==46.0.3
+python-dotenv==1.2.1      # .env file handling
+pyasn1==0.6.1
+rsa==4.9.1
+ecdsa==0.19.1
 
 # === File Handling & Utilities ===
-aiofiles          # Async file operations
-werkzeug           # secure_filename utility
+aiofiles==25.1.0          # Async file operations
+werkzeug==3.1.3           # secure_filename utility
+python-multipart==0.0.20
+filelock==3.20.0
+fsspec==2025.10.0
 
 # === HTTP Client ===
-httpx            # Async HTTP client (for testing)
+httpx==0.28.1             # Async HTTP client
+httpcore==1.0.9
+anyio==4.11.0
+sniffio==1.3.1
+certifi==2025.10.5
+charset-normalizer==3.4.4
+idna==3.11
+urllib3==2.5.0
+
+# === Scientific Computing ===
+scikit-learn==1.7.2
+scipy==1.16.3
+joblib==1.5.2
+threadpoolctl==3.6.0
 
 # === Testing Framework ===
-pytest
-pytest-asyncio
-pytest-cov
+pytest==8.4.2
+pytest-asyncio==1.2.0
+pytest-cov==7.0.0
+coverage==7.11.0
+pluggy==1.6.0
+iniconfig==2.3.0
 
 # === Code Quality ===
-black
-flake8
-isort
+black==25.9.0
+flake8==7.3.0
+isort==7.0.0
+pycodestyle==2.14.0
+pyflakes==3.4.0
+mccabe==0.7.0
+mypy_extensions==1.1.0
+pathspec==0.12.1
 
 # === Logging ===
-python-json-logger  # Structured JSON logging
-colorlog          # Colored console logs (dev)
+python-json-logger==4.0.0  # Structured JSON logging
+colorlog==6.10.1           # Colored console logs (dev)
 
 # === Utilities ===
-python-dateutil
-pytz
+python-dateutil==2.9.0.post0
+pytz==2025.2
+click==8.3.0
+tqdm==4.67.1
+packaging==25.0
+platformdirs==4.5.0
+six==1.17.0
+wrapt==2.0.0
+Deprecated==1.3.1
+
+# === Additional Dependencies ===
+cffi==2.23
+pycparser==2.23
+Pygments==2.19.2
+setuptools==80.9.0
