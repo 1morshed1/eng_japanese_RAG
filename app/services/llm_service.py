@@ -283,25 +283,39 @@ class LLMService:
             if not text:
                 continue
             
-            # Note: We don't translate retrieved documents because:
-            # 1. Medical translation quality is often poor
-            # 2. Original medical terms are important for accuracy
-            # 3. Clinicians can read both languages
-            # We use the document text in its original language
+            # Translate document text if language mismatch
+            # Note: Translation quality may vary but we attempt it for consistency
+            if doc_lang != language:
+                try:
+                    logger.info(f"Translating document text from {doc_lang} to {language}")
+                    # Translate first 400 chars
+                    text_to_translate = text[:400]
+                    translated_text = translation_service.translate(text_to_translate, doc_lang, language, max_length=300)
+                    
+                    # Use translation even if quality is uncertain
+                    if translated_text and len(translated_text) > 5:
+                        text = translated_text
+                        logger.info(f"Translation completed: {len(text)} chars")
+                    else:
+                        logger.warning(f"Translation returned empty/short result, using original")
+                        
+                except Exception as e:
+                    logger.warning(f"Translation failed: {e}, using original text")
+                    # Use original if translation completely fails
             
             # Extract first 1-2 meaningful sentences
-            doc_language_for_split = doc_lang  # Use document's actual language for sentence splitting
-            sentences = self._split_into_sentences(text, doc_language_for_split)
+            # Use the target language for sentence splitting (after translation)
+            sentences = self._split_into_sentences(text, language)
             meaningful_sentences = []
             
             for sentence in sentences[:2]:  # Take first 2 sentences
-                if len(sentence.strip()) > 20:  # Basic length check instead of keyword check
+                if len(sentence.strip()) > 10:  # Lenient length check
                     meaningful_sentences.append(sentence.strip())
             
             if meaningful_sentences:
-                summary = '. '.join(meaningful_sentences)
+                summary = ('。' if language == 'ja' else '. ').join(meaningful_sentences)
                 if not summary.endswith('.') and not summary.endswith('。'):
-                    summary += '.' if doc_lang == 'en' else '。'
+                    summary += '。' if language == 'ja' else '.'
                 findings.append(f"{i}. {summary}")
         
         return "\n".join(findings) if findings else ""
@@ -328,11 +342,26 @@ class LLMService:
             if not text:
                 continue
             
-            # Note: Using original document text without translation
-            # Medical terminology should be preserved in original language for accuracy
+            # Translate document text if language mismatch
+            if doc_lang != language:
+                try:
+                    logger.info(f"Translating recommendation from {doc_lang} to {language}")
+                    # Translate first 400 chars
+                    text_to_translate = text[:400]
+                    translated_text = translation_service.translate(text_to_translate, doc_lang, language, max_length=300)
+                    
+                    # Use translation even if quality is uncertain
+                    if translated_text and len(translated_text) > 5:
+                        text = translated_text
+                        logger.info(f"Translation completed: {len(text)} chars")
+                    else:
+                        logger.warning(f"Translation returned empty/short, using original")
+                        
+                except Exception as e:
+                    logger.warning(f"Translation failed: {e}, using original")
             
-            doc_language_for_split = doc_lang  # Use document's language for splitting
-            sentences = self._split_into_sentences(text, doc_language_for_split)
+            # Use target language for sentence splitting
+            sentences = self._split_into_sentences(text, language)
             
             for sentence in sentences[:3]:  # Take first 3 sentences per document
                 sentence_normalized = ' '.join(sentence.split())  # Normalize whitespace
@@ -341,9 +370,9 @@ class LLMService:
                 if sentence_normalized.lower() in seen_sentences:
                     continue
                 
-                # Include sentence if it has keywords OR is substantial (>30 chars)
+                # Include sentence if it has keywords OR is substantial (>20 chars)
                 has_keyword = any(keyword.lower() in sentence.lower() for keyword in keywords)
-                is_substantial = len(sentence.strip()) > 30
+                is_substantial = len(sentence.strip()) > 20
                 
                 if has_keyword or is_substantial:
                     clean_sentence = sentence.strip()
@@ -368,10 +397,35 @@ class LLMService:
         Returns:
             Summary text
         """
-        # Extract key phrases from documents (in original language)
-        # Note: Medical documents shown in original language for accuracy
-        all_text = " ".join([doc.get('text', '') for doc in documents[:3]])
-        if not all_text.strip():
+        # Extract and translate summary from documents
+        translated_texts = []
+        
+        for doc in documents[:3]:
+            text = doc.get('text', '')
+            doc_lang = doc.get('language', 'en')
+            
+            if not text:
+                continue
+            
+            # Translate if language mismatch
+            if doc_lang != language:
+                try:
+                    logger.info(f"Translating summary text from {doc_lang} to {language}")
+                    text_to_translate = text[:300]
+                    translated = translation_service.translate(text_to_translate, doc_lang, language, max_length=200)
+                    
+                    if translated and len(translated) > 5:
+                        text = translated
+                        logger.info(f"Summary translation successful")
+                    else:
+                        logger.warning(f"Translation short, using original")
+                        
+                except Exception as e:
+                    logger.warning(f"Summary translation failed: {e}, using original")
+            
+            translated_texts.append(text)
+        
+        if not translated_texts:
             # Fallback if no text
             if language == "ja":
                 fallback_text = "個別の症例については医療専門家にご相談ください"
@@ -380,9 +434,9 @@ class LLMService:
             template = self.response_templates[language]["summary_template"]
             return template.format(summary=fallback_text)
         
-        # Use first document's language for sentence splitting
-        first_doc_lang = documents[0].get('language', 'en') if documents else 'en'
-        sentences = self._split_into_sentences(all_text, first_doc_lang)
+        # Combine texts and split into sentences
+        all_text = " ".join(translated_texts)
+        sentences = self._split_into_sentences(all_text, language)
         
         # Use first meaningful sentence as summary
         for sentence in sentences:

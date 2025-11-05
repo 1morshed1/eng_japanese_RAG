@@ -1,8 +1,0 @@
-{
-  "doc_counter": 11,
-  "total_vectors": 891,
-  "total_documents": 4,
-  "embedding_dim": 384,
-  "last_updated": 1762327455.4804075,
-  "index_type": "IndexFlatIP"
-}
