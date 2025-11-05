@@ -1,0 +1,71 @@
+# Version control
+.git
+.gitignore
+.github
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Documentation (keep only essential)
+*.md
+!README.md
+acme/
+
+# Data and logs (will be generated)
+data/
+logs/
+*.log
+
+# Environment files (security)
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+temp/
+tmp/
+
+# Large model caches (will download in container)
+.cache/
+*.pkl
+*.pt
+*.pth
+
+# Documentation PDFs
+*.pdf
+

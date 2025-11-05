@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  healthcare-rag-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: healthcare-rag-assistant
+    image: healthcare-rag-assistant:latest
+    
+    ports:
+      - "8000:8000"
+    
+    environment:
+      # Override with your actual values or use .env file
+      - API_KEYS=${API_KEYS:-dev-key-12345}
+      - ENV=${ENV:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - HOST=0.0.0.0
+      - PORT=8000
+      
+      # Model configuration
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-paraphrase-multilingual-MiniLM-L12-v2}
+      - EMBEDDING_DIM=${EMBEDDING_DIM:-384}
+      - TRANSLATION_MODEL_EN_JA=${TRANSLATION_MODEL_EN_JA:-Helsinki-NLP/opus-mt-en-jap}
+      - TRANSLATION_MODEL_JA_EN=${TRANSLATION_MODEL_JA_EN:-Helsinki-NLP/opus-mt-jap-en}
+      
+      # FAISS configuration
+      - FAISS_INDEX_DIR=/app/data/faiss_index
+      
+      # File upload limits
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-10}
+      - MAX_CHUNK_SIZE=${MAX_CHUNK_SIZE:-500}
+      - ALLOWED_EXTENSIONS=${ALLOWED_EXTENSIONS:-.txt}
+      
+      # Rate limiting
+      - RATE_LIMIT_INGEST=${RATE_LIMIT_INGEST:-10/hour}
+      - RATE_LIMIT_RETRIEVE=${RATE_LIMIT_RETRIEVE:-100/hour}
+      - RATE_LIMIT_GENERATE=${RATE_LIMIT_GENERATE:-50/hour}
+    
+    volumes:
+      # Persist FAISS index and logs
+      - faiss_data:/app/data/faiss_index
+      - app_logs:/app/logs
+      # Optional: Mount docs for testing
+      - ./docs:/app/docs:ro
+    
+    networks:
+      - rag_network
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    # Resource limits (adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+
+# Named volumes for data persistence
+volumes:
+  faiss_data:
+    driver: local
+  app_logs:
+    driver: local
+
+# Network configuration
+networks:
+  rag_network:
+    driver: bridge
+
