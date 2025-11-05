@@ -2,3 +2,6 @@ acme/
 __pycache__/
 .env
 venv/
+data/
+docs/
+logs/
