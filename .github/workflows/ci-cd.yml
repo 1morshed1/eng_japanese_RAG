@@ -150,7 +150,7 @@ jobs:
       
       - name: Upload Docker image artifact
         if: github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: docker-image
           path: healthcare-rag-assistant.tar.gz
@@ -245,7 +245,7 @@ jobs:
           pip install requests pytest
       
       - name: Download Docker image artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: docker-image
       
