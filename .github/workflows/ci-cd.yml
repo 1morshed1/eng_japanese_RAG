@@ -6,8 +6,14 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+  security-events: write
+  actions: read
+  packages: write
+
 env:
-  PYTHON_VERSION: '3.10'
+  PYTHON_VERSION: '3.12'
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
@@ -73,7 +79,7 @@ jobs:
       
       - name: Set up test environment
         run: |
-          echo "API_KEYS=test-key-12345" > .env
+          echo "API_KEYS=12345" > .env
           echo "ENV=testing" >> .env
           echo "LOG_LEVEL=DEBUG" >> .env
           mkdir -p data/faiss_index logs
@@ -169,7 +175,7 @@ jobs:
           output: 'trivy-results.sarif'
       
       - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
