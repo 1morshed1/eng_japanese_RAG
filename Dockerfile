@@ -16,7 +16,7 @@ COPY requirements.txt .
 # Install Python dependencies
 # Use PyTorch CPU-only index to avoid downloading CUDA packages
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir torch==2.9.0 --index-url https://download.pytorch.org/whl/cpu && \
     pip install --no-cache-dir -r requirements.txt
 
 # Stage 2: Runtime - Minimal image
