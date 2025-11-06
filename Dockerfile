@@ -1,6 +1,6 @@
 # Multi-stage Dockerfile for Healthcare RAG Assistant
 # Stage 1: Builder - Install dependencies
-FROM python:3.10-slim as builder
+FROM python:3.11-slim as builder
 
 # Set working directory
 WORKDIR /app
@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Stage 2: Runtime - Minimal image
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
