@@ -1,6 +1,6 @@
 # Healthcare RAG Assistant - Production Requirements
-# Python 3.10+
-# Combined from req.txt (pinned versions) and requirements.txt (dependencies)
+# Python 3.11+
+# CPU-only deployment (no GPU/CUDA dependencies)
 
 # === Core Web Framework ===
 fastapi==0.121.0
