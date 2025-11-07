@@ -1,4 +1,4 @@
-# Healthcare RAG Assistant 🏥
+# Healthcare RAG Assistant 
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.121.0-009688.svg)](https://fastapi.tiangolo.com/)
@@ -9,26 +9,26 @@ A production-ready, bilingual (English/Japanese) **Retrieval-Augmented Generatio
 
 ---
 
-## 🌟 Features
+##  Features
 
 ### Core Capabilities
-- **🌐 Bilingual Support**: Seamless English ↔ Japanese queries and responses
-- **🔍 Semantic Search**: FAISS-powered vector similarity search
-- **📚 RAG Architecture**: Retrieval-Augmented Generation for accurate, source-backed responses
-- **🏥 Medical Domain**: Template-based responses with medical disclaimers and citations
-- **⚡ Fast & Efficient**: CPU-optimized, lightweight deployment
+- ** Bilingual Support**: Seamless English ↔ Japanese queries and responses
+- ** Semantic Search**: FAISS-powered vector similarity search
+- ** RAG Architecture**: Retrieval-Augmented Generation for accurate, source-backed responses
+- ** Medical Domain**: Template-based responses with medical disclaimers and citations
+- ** Fast & Efficient**: CPU-optimized, lightweight deployment
 
 ### Technical Features
-- **🔐 API Key Authentication**: Secure constant-time key validation
-- **🚦 Rate Limiting**: Configurable limits per endpoint
-- **📊 Structured Logging**: JSON logging with request tracking
-- **🐳 Docker Ready**: Multi-stage builds with health checks
-- **🚀 CI/CD Pipeline**: GitHub Actions with automated testing and deployment
-- **📖 Auto Documentation**: Interactive OpenAPI/Swagger docs
+- ** API Key Authentication**: Secure constant-time key validation
+- ** Rate Limiting**: Configurable limits per endpoint
+- ** Structured Logging**: JSON logging with request tracking
+- ** Docker Ready**: Multi-stage builds with health checks
+- ** CI/CD Pipeline**: GitHub Actions with automated testing and deployment
+- ** Auto Documentation**: Interactive OpenAPI/Swagger docs
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Quick Start](#-quick-start)
 - [Installation](#-installation)
@@ -46,7 +46,7 @@ A production-ready, bilingual (English/Japanese) **Retrieval-Augmented Generatio
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Python 3.11+
@@ -55,7 +55,7 @@ A production-ready, bilingual (English/Japanese) **Retrieval-Augmented Generatio
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/healthcare-rag-assistant.git
+git clone https://github.com/1morshed1/healthcare-rag-assistant.git
 cd healthcare-rag-assistant
 ```
 
@@ -89,7 +89,7 @@ curl http://localhost:8000/health
 
 ---
 
-## 📦 Installation
+##  Installation
 
 ### Local Development
 
@@ -174,7 +174,7 @@ docker logs -f healthcare-rag
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Environment Variables
 
@@ -185,28 +185,6 @@ All configuration is managed through environment variables in `.env`. See `.env.
 ```bash
 # API Authentication (REQUIRED)
 API_KEYS=key1,key2,key3  # Comma-separated list of valid API keys
-
-# Application Settings
-ENV=development          # development | production | testing
-LOG_LEVEL=INFO          # DEBUG | INFO | WARNING | ERROR | CRITICAL
-HOST=0.0.0.0
-PORT=8000
-
-# Model Configuration
-EMBEDDING_MODEL=paraphrase-multilingual-MiniLM-L12-v2
-EMBEDDING_DIM=384
-TRANSLATION_MODEL_EN_JA=Helsinki-NLP/opus-mt-en-ja
-TRANSLATION_MODEL_JA_EN=Helsinki-NLP/opus-mt-ja-en
-
-# Rate Limiting
-RATE_LIMIT_INGEST=10/hour      # Document ingestion
-RATE_LIMIT_RETRIEVE=100/hour   # Document retrieval
-RATE_LIMIT_GENERATE=50/hour    # Response generation
-
-# File Upload
-MAX_FILE_SIZE_MB=10
-MAX_CHUNK_SIZE=500
-ALLOWED_EXTENSIONS=.txt
 ```
 
 #### Advanced Settings
@@ -234,7 +212,7 @@ openssl rand -base64 32
 
 ---
 
-## 📚 API Documentation
+##  API Documentation
 
 ### Interactive Documentation
 
@@ -265,7 +243,7 @@ curl -H "X-API-Key: your-api-key" http://localhost:8000/api/v1/retrieve
 
 ---
 
-## 💡 Usage Examples
+##  Usage Examples
 
 ### 1. Ingest a Document
 
@@ -436,7 +414,7 @@ ingestDocument().then(() => generateResponse());
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ### System Overview
 
@@ -863,7 +841,7 @@ curl -H "X-API-Key: your-key" http://localhost:8000/api/v1/generate/health
 
 ---
 
-## 🔒 Security
+##  Security
 
 ### Best Practices
 
@@ -895,20 +873,6 @@ safety check -r requirements.txt
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-### Development Setup
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `pytest tests/`
-5. Commit: `git commit -m 'Add amazing feature'`
-6. Push: `git push origin feature/amazing-feature`
-7. Open a Pull Request
-
 ### Code Standards
 
 - **Style**: Follow PEP 8, use `black` for formatting
@@ -932,7 +896,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **FastAPI**: Modern web framework
 - **FAISS**: Efficient similarity search by Meta AI
@@ -942,11 +906,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📮 Contact & Support
+##  Contact & Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/healthcare-rag-assistant/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/healthcare-rag-assistant/discussions)
-- **Email**: your-email@example.com
+- **Issues**: [GitHub Issues](https://github.com/1morshed1/healthcare-rag-assistant/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/1morshed1/healthcare-rag-assistant/discussions)
+- **Email**: morshedfahim87@gmail.com
 
 ---
 
@@ -963,58 +927,30 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🗺️ Roadmap
 
 ### Version 1.x (Current)
-- ✅ Bilingual support (EN/JA)
-- ✅ RAG with FAISS
-- ✅ Docker deployment
-- ✅ CI/CD pipeline
-- ⚠️ Template-based responses
+-  Bilingual support (EN/JA)
+-  RAG with FAISS
+-  Docker deployment
+-  CI/CD pipeline
+-  Template-based responses
 
-### Version 2.0 (Planned)
-- [ ] Unit and integration tests
-- [ ] PDF/DOCX support
-- [ ] Real LLM integration (OpenAI, Anthropic)
-- [ ] Prometheus metrics
-- [ ] User management and RBAC
-- [ ] Automatic backups
-- [ ] Multi-language support (beyond EN/JA)
+### Things to be added in the future for further improvements:
+- Unit and Integration Tests
+- PDF/DOCX support
+- Real LLM Integration (OpenAI, Anthropic)
+- Prometheus Metrics
+- User management and RBAC
+- Automatic Backups
+- Multi Language Support (beyond En/ Jap)
+- Chat History and context
+- Fine Tuned Models
+- Caching( via Redis, celery)
+- Admin dashboard
+- Database Integration (MongoDB or Postgresql)
+- Rate Limiting Tiers
+- Document Versioning
 
-### Version 3.0 (Future)
-- [ ] Chat history and context
-- [ ] Fine-tuned models
-- [ ] Advanced caching
-- [ ] Kubernetes deployment
-- [ ] Admin dashboard
-- [ ] A/B testing framework
-
----
-
-## ⚠️ Known Limitations
-
-1. **File Formats**: Currently only supports .txt files
-2. **Translation Quality**: MarianMT has limitations; quality may vary
-3. **LLM**: Template-based, not true generative AI
-4. **Scalability**: IndexFlatIP optimal for <1M vectors
-5. **RBAC**: No role-based access control yet
-
-See [Issues](https://github.com/yourusername/healthcare-rag-assistant/issues) for detailed tracking.
 
 ---
-
-## 📈 Changelog
-
-### v1.0.0 (2025-11-06)
-- Initial release
-- Bilingual EN/JA support
-- FAISS vector search
-- Docker deployment
-- CI/CD pipeline
-- API key authentication
-- Rate limiting
-- Health monitoring
-
----
-
-**Built with ❤️ for healthcare professionals**
 
 *Star ⭐ this repo if you find it helpful!*
 

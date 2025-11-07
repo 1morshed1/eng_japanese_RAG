@@ -31,9 +31,9 @@ class Settings(BaseSettings):
         extra="ignore" 
     )
     
-    # ========================================
+
     # API Configuration
-    # ========================================
+
     API_KEYS: str = Field(
         default="",
         description="Comma-separated list of valid API keys"
@@ -46,17 +46,17 @@ class Settings(BaseSettings):
         description="Comma-separated CORS origins"
     )
     
-    # ========================================
+
     # Logging Configuration
-    # ========================================
+
     LOG_LEVEL: str = Field(
         default="INFO",
         description="Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)"
     )
     
-    # ========================================
+
     # Model Configuration
-    # ========================================
+
     EMBEDDING_MODEL: str = Field(
         default="paraphrase-multilingual-MiniLM-L12-v2",
         description="Sentence transformer model for embeddings"
@@ -70,9 +70,9 @@ class Settings(BaseSettings):
         description="Japanese to English translation model"
     )
     
-    # ========================================
+
     # FAISS Configuration
-    # ========================================
+
     FAISS_INDEX_DIR: str = Field(
         default="data/faiss_index",
         description="Directory for FAISS index storage"
@@ -82,9 +82,9 @@ class Settings(BaseSettings):
         description="Embedding dimension (must match model)"
     )
     
-    # ========================================
+
     # File Upload Limits
-    # ========================================
+
     MAX_FILE_SIZE_MB: int = Field(
         default=10,
         ge=1,
@@ -108,25 +108,8 @@ class Settings(BaseSettings):
         description="Comma-separated allowed file extensions"
     )
     
-    # ========================================
-    # Rate Limiting (requests per hour)
-    # ========================================
-    RATE_LIMIT_INGEST: str = Field(
-        default="10/hour",
-        description="Rate limit for /ingest endpoint"
-    )
-    RATE_LIMIT_RETRIEVE: str = Field(
-        default="100/hour",
-        description="Rate limit for /retrieve endpoint"
-    )
-    RATE_LIMIT_GENERATE: str = Field(
-        default="50/hour",
-        description="Rate limit for /generate endpoint"
-    )
-    
-    # ========================================
+
     # Validators
-    # ========================================
     
     @field_validator('API_KEYS', mode='before')
     @classmethod
@@ -176,9 +159,8 @@ class Settings(BaseSettings):
         os.makedirs(v, exist_ok=True)
         return v
     
-    # ========================================
+
     # Helper Methods
-    # ========================================
     
     def get_api_keys_list(self) -> list[str]:
         """

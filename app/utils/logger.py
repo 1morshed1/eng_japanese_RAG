@@ -70,7 +70,7 @@ class JSONFormatter(logging.Formatter):
         'levelname', 'levelno', 'lineno', 'module', 'msecs', 'message',
         'pathname', 'process', 'processName', 'relativeCreated',
         'thread', 'threadName', 'exc_info', 'exc_text', 'stack_info',
-        'taskName'  # Added in Python 3.12
+        'taskName' 
     }
     
     def format(self, record: logging.LogRecord) -> str:
@@ -180,9 +180,9 @@ def setup_logging(log_level: Optional[str] = None) -> logging.Logger:
     except OSError as e:
         print(f"Warning: Could not create logs directory: {e}", file=sys.stderr)
     
-    # ========================================
+
     # Console Handler
-    # ========================================
+
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.DEBUG)
     
@@ -207,14 +207,14 @@ def setup_logging(log_level: Optional[str] = None) -> logging.Logger:
     
     logger.addHandler(console_handler)
     
-    # ========================================
+
     # File Handler (with rotation)
-    # ========================================
+
     try:
         file_handler = RotatingFileHandler(
             'logs/app.log',
-            maxBytes=10 * 1024 * 1024,  # 10 MB
-            backupCount=5,  # Keep 5 backup files
+            maxBytes=10 * 1024 * 1024,  
+            backupCount=5,  
             encoding='utf-8'
         )
         file_handler.setLevel(logging.DEBUG)
@@ -271,9 +271,8 @@ def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 
 
-# ========================================
+
 # Context Managers for Request Logging
-# ========================================
 
 from contextlib import contextmanager
 import time

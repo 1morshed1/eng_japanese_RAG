@@ -12,7 +12,6 @@ services:
       - "8000:8000"
     
     environment:
-      # Override with your actual values or use .env file
       - API_KEYS=${API_KEYS:-dev-key-12345}
       - ENV=${ENV:-production}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}

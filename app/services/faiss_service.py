@@ -24,20 +24,6 @@ logger = logging.getLogger(__name__)
 class FAISSService:
     """
     Service for managing FAISS vector index with persistent storage.
-    
-    Features:
-        - Automatic disk persistence after each operation
-        - Metadata tracking for each vector
-        - Document-level operations (add, delete, retrieve)
-        - Language filtering
-        - Thread-safe operations
-        - Health monitoring
-    
-    Example:
-        >>> service = FAISSService()
-        >>> chunks = ["chunk 1", "chunk 2"]
-        >>> embeddings = np.random.rand(2, 384)
-        >>> service.add_document("doc_123", chunks, embeddings, "en")
     """
     
     def __init__(self, index_dir: str = None):
@@ -430,9 +416,6 @@ class FAISSService:
     def delete_document(self, document_id: str) -> bool:
         """
         Delete all chunks of a document from the index.
-        
-        Note: Marks chunks as deleted in metadata. Use compact_index()
-        to actually remove them from memory.
         
         Args:
             document_id: Document ID to delete

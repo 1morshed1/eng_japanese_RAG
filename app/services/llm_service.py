@@ -488,7 +488,7 @@ class LLMService:
             clean_sentences = []
             for sentence in sentences:
                 sentence = sentence.strip()
-                if sentence and len(sentence) > 10:  # Minimum length
+                if sentence and len(sentence) > 10:  
                     clean_sentences.append(sentence)
             
             return clean_sentences
@@ -513,7 +513,7 @@ class LLMService:
         Returns:
             True if sentence is meaningful
         """
-        if len(sentence) < 20:  # Too short
+        if len(sentence) < 20:  
             return False
         
         # Check for medical keywords
@@ -524,7 +524,7 @@ class LLMService:
         sentence_lower = sentence.lower()
         has_keyword = any(keyword in sentence_lower for keyword in all_keywords)
         
-        # Also accept sentences with numbers (likely contain data/measurements)
+        # Also accept sentences with numbers 
         has_number = bool(re.search(r'\d', sentence))
         
         return has_keyword or has_number

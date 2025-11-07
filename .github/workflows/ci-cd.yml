@@ -279,7 +279,7 @@ jobs:
           curl -f -H "X-API-Key: test-key-for-ci" \
             http://localhost:8000/admin/stats
           
-          echo "✅ Integration tests passed"
+          echo " Integration tests passed"
       
       - name: Cleanup
         if: always()
