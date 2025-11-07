@@ -11,9 +11,8 @@ from typing import Optional, List, Literal
 from datetime import datetime
 
 
-# ============================================
+
 # Shared Validators
-# ============================================
 
 def validate_query_field(v: str) -> str:
     """
@@ -26,9 +25,8 @@ def validate_query_field(v: str) -> str:
     return v.strip()
 
 
-# ============================================
+
 # Ingest Models
-# ============================================
 
 class IngestResponse(BaseModel):
     """
@@ -84,9 +82,8 @@ class IngestResponse(BaseModel):
     )
 
 
-# ============================================
+
 # Retrieve Models
-# ============================================
 
 class RetrieveRequest(BaseModel):
     """
@@ -217,9 +214,8 @@ class RetrieveResponse(BaseModel):
     )
 
 
-# ============================================
+
 # Generate Models
-# ============================================
 
 class GenerateRequest(BaseModel):
     """
@@ -324,9 +320,8 @@ class GenerateResponse(BaseModel):
     )
 
 
-# ============================================
+
 # Common Response Models
-# ============================================
 
 class HealthResponse(BaseModel):
     """Health check response model."""

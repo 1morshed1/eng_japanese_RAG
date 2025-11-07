@@ -5,9 +5,6 @@ import logging
 import nltk
 from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
 
 from app.config import settings
 from app.middleware.auth import api_key_auth
@@ -23,19 +20,12 @@ logger = logging.getLogger(__name__)
 # Track startup time
 start_time = time.time()
 
-# Initialize rate limiter
-limiter = Limiter(key_func=get_remote_address)
-
 # Create FastAPI app
 app = FastAPI(
     title="Healthcare RAG Assistant",
     description="Bilingual medical knowledge assistant for clinicians",
     version="1.0.0"
 )
-
-# Add rate limiter to app state
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Security headers middleware
 @app.middleware("http")

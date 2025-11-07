@@ -196,14 +196,8 @@ async def _process_generation_request(
         )
     
     # Step 3: Use original query for retrieval
-    # The multilingual embedding model handles both EN and JA queries directly
-    # No translation needed - it can match JA queries to JA documents and EN queries to EN documents
     query_for_retrieval = request.query
     
-    # Note: Translation removed because:
-    # 1. Multilingual embeddings work across languages
-    # 2. Direct query matching works better for same-language documents
-    # 3. Translation can introduce errors that hurt retrieval quality
     logger.debug(
         "Using original query for retrieval",
         extra={

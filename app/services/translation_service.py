@@ -273,7 +273,7 @@ class TranslationService:
                 translated_tokens = model.generate(
                     **inputs,
                     max_length=max_length,
-                    num_beams=4,  # Beam search for better quality
+                    num_beams=4,  
                     early_stopping=True
                 )
             

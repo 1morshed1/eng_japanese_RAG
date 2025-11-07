@@ -8,7 +8,7 @@ for both English and Japanese languages.
 
 import logging
 import re
-import time  # ✅ Import at top!
+import time  
 from typing import List, Dict, Optional, Set
 import nltk
 from app.config import settings
@@ -17,7 +17,7 @@ from app.services.translation_service import translation_service
 
 logger = logging.getLogger(__name__)
 
-# Download NLTK data if not present (run once)
+# Download NLTK data if not present
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
@@ -276,7 +276,7 @@ class LLMService:
         """
         findings = []
         
-        for i, doc in enumerate(documents[:3], 1):  # Use top 3 documents
+        for i, doc in enumerate(documents[:3], 1): 
             text = doc.get('text', '')
             doc_lang = doc.get('language', 'en')
             
@@ -284,7 +284,6 @@ class LLMService:
                 continue
             
             # Translate document text if language mismatch
-            # Note: Translation quality may vary but we attempt it for consistency
             if doc_lang != language:
                 try:
                     logger.info(f"Translating document text from {doc_lang} to {language}")
@@ -304,12 +303,12 @@ class LLMService:
                     # Use original if translation completely fails
             
             # Extract first 1-2 meaningful sentences
-            # Use the target language for sentence splitting (after translation)
+
             sentences = self._split_into_sentences(text, language)
             meaningful_sentences = []
             
-            for sentence in sentences[:2]:  # Take first 2 sentences
-                if len(sentence.strip()) > 10:  # Lenient length check
+            for sentence in sentences[:2]:  
+                if len(sentence.strip()) > 10:  
                     meaningful_sentences.append(sentence.strip())
             
             if meaningful_sentences:
@@ -332,10 +331,10 @@ class LLMService:
             Formatted recommendations text
         """
         recommendations = []
-        seen_sentences: Set[str] = set()  # Track to avoid duplicates
+        seen_sentences: Set[str] = set()  
         keywords = self.medical_patterns["recommendation_keywords"][language]
         
-        for doc in documents[:5]:  # Check top 5 documents
+        for doc in documents[:5]:  
             text = doc.get('text', '')
             doc_lang = doc.get('language', 'en')
             
@@ -350,7 +349,7 @@ class LLMService:
                     text_to_translate = text[:400]
                     translated_text = translation_service.translate(text_to_translate, doc_lang, language, max_length=300)
                     
-                    # Use translation even if quality is uncertain
+                    # Use translation 
                     if translated_text and len(translated_text) > 5:
                         text = translated_text
                         logger.info(f"Translation completed: {len(text)} chars")
@@ -363,8 +362,8 @@ class LLMService:
             # Use target language for sentence splitting
             sentences = self._split_into_sentences(text, language)
             
-            for sentence in sentences[:3]:  # Take first 3 sentences per document
-                sentence_normalized = ' '.join(sentence.split())  # Normalize whitespace
+            for sentence in sentences[:3]:  
+                sentence_normalized = ' '.join(sentence.split()) 
                 
                 # Skip if already seen (avoid duplicates)
                 if sentence_normalized.lower() in seen_sentences:
