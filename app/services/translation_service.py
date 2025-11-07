@@ -42,8 +42,8 @@ class TranslationService:
             device: Device to use ('cuda', 'cpu', or None for auto-detect)
         """
         # Model names for Helsinki-NLP MarianMT models
-        self.en_ja_model_name = settings.TRANSLATION_MODEL_EN_JA
-        self.ja_en_model_name = settings.TRANSLATION_MODEL_JA_EN
+        self.en_ja_model_name = "Helsinki-NLP/opus-mt-en-jap"
+        self.ja_en_model_name = "Helsinki-NLP/opus-mt-jap-en"
         
         # Device configuration
         if device is None:
